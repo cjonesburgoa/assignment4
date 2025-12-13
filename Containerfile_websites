@@ -1,5 +1,6 @@
 FROM fedora:latest AS base
-RUN dnf install -y httpd && dnf clean all
+RUN dnf -y install httpd && \
+    mkdir -p /var/www/html
 EXPOSE 80
 ENTRYPOINT ["/usr/sbin/httpd", "-D", "FOREGROUND"]
 
@@ -11,3 +12,6 @@ LABEL website="1"
 FROM base AS website2 
 COPY website2.html /var/www/html/index.html
 LABEL website="2"
+#Final image for website1
+FROM website1 AS final
+LABEL final="website1"
